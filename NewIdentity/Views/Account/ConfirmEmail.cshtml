@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Confirm Email";
+}
+
+<div class="text-center">
+    @if (ViewBag.IsConfirmed)
+    {
+        <div class="alert alert-success">
+          Account verified. Click on the Link below to Sign in.
+        </div>
+        <p>
+            <a asp-action="Login" asp-controller="Account">Login To Website</a>
+        </p>
+    }
+    else
+    {
+        <div class="alert alert-danger">
+            Account is not verified.
+        </div>
+    }
+</div>
