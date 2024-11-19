@@ -1,0 +1,22 @@
+﻿@model List<Country> 
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Name</th>
+          
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var country in Model)
+        {
+            <tr>
+                <th scope="row">@country.Id</th>
+                <th>@country.Name</th>
+
+            </tr>
+        }
+      
+     
+    </tbody>
+</table>

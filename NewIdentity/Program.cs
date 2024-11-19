@@ -11,12 +11,12 @@ using NewIdentity.Models;
     var builder = WebApplication.CreateBuilder(args);
 
 
-    builder.Services.AddDbContext<AppDbContext>(options =>
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
     builder.Services.AddDefaultIdentity<IdentityUser>().
-        AddEntityFrameworkStores<AppDbContext>().
+        AddEntityFrameworkStores<ApplicationDbContext>().
         AddDefaultTokenProviders();
 
 
@@ -31,12 +31,12 @@ builder.Services.AddScoped<IViewRenderService, ViewRenderService>();
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-    builder.Services.AddDbContext<AppDbContext>(options =>
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(connectionString));
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
     //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    //    .AddEntityFrameworkStores<AppDbContext>();
+    //    .AddEntityFrameworkStores<ApplicationDbContext>();
     builder.Services.AddControllersWithViews();
 
     var app = builder.Build();

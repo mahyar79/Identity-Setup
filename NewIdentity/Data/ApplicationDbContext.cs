@@ -4,13 +4,33 @@ using NewIdentity.Models;
 
 namespace NewIdentity.Data
 {
-    public class AppDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
 
+        
         public DbSet<Product> Products { get; set; }
+        public DbSet<Country> Countries { get; set; }
+
+        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+         
+            modelBuilder.Entity<ApplicationUser>()
+                .HasOne(u => u.Country)
+                .WithMany(el => el.Users)
+                .HasForeignKey(u => u.CountryId)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            
+                
+        }
+
+
     }
 }

@@ -12,9 +12,9 @@ namespace NewIdentity.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public ProductsController(AppDbContext context)
+        public ProductsController(ApplicationDbContext context)
         {
             _context = context;
         }

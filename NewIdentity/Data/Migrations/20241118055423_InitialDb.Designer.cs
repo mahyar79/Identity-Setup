@@ -11,7 +11,7 @@ using NewIdentity.Data;
 
 namespace NewIdentity.Data.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20241118055423_InitialDb")]
     partial class InitialDb
     {
