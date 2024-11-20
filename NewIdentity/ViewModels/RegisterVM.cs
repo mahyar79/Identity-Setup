@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace NewIdentity.ViewModels
@@ -22,5 +23,8 @@ namespace NewIdentity.ViewModels
         [DataType(DataType.Password)]
         [Compare(nameof(Password))]
         public string RePassword { get; set; }
+
+        public int? SelectedCountryId { get; set; }
+        public List<SelectListItem> Countries { get; set; }
     }
 }

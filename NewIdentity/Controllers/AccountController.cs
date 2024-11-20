@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using NewIdentity.Data;
 
 
 namespace NewIdentity.Controllers
@@ -18,53 +20,100 @@ namespace NewIdentity.Controllers
 
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext _dbContext;
         private readonly IViewRenderService _viewRenderService;
 
-        public AccountController(UserManager<IdentityUser> userManager, IEmailSender emailSender)
+        public AccountController(UserManager<IdentityUser> userManager, IEmailSender emailSender, ApplicationDbContext dbContext)
         {
             _userManager = userManager;
             _emailSender = emailSender;
+            _dbContext = dbContext;
         }
+
+        [HttpGet]
         public IActionResult Register()
         {
+            
+            var countries = _dbContext.Countries
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Name
+                }).ToList();
+
+            
+            var model = new RegisterVM
+            {
+                Countries = countries
+            };
+
             ViewBag.IsSent = false;
-            return View();
+            return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterVM model)
         {
+           
             if (!ModelState.IsValid)
-                return View();
+            {
+                model.Countries = _dbContext.Countries
+                    .Select(c => new SelectListItem
+                    {
+                        Value = c.Id.ToString(),
+                        Text = c.Name
+                    }).ToList();
+                return View(model);
+            }
 
-            var result = await _userManager.CreateAsync(new IdentityUser()
+           
+            var user = new ApplicationUser
             {
                 UserName = model.UserName,
                 Email = model.Email,
-                PhoneNumber = model.Phone
-            }, model.Password);
+                PhoneNumber = model.Phone,
+                CountryId = model.SelectedCountryId 
+            };
 
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+           
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
-                    return View();
                 }
+
+                model.Countries = _dbContext.Countries
+                    .Select(c => new SelectListItem
+                    {
+                        Value = c.Id.ToString(),
+                        Text = c.Name
+                    }).ToList();
+                return View(model);
             }
 
-            var user = await _userManager.FindByNameAsync(model.UserName);
-            var toekn = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            toekn = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(toekn));
-            string? callBackurl = Url.ActionLink("ConfirmEmail", "Account", new { UserId = user.Id, token = toekn
-                , Request.Scheme });
+          
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-            string body = await _viewRenderService.RenderToStringAsync("_RegisterEmail", callBackurl);
+           
+            string? callBackUrl = Url.ActionLink("ConfirmEmail", "Account", new
+            {
+                UserId = user.Id,
+                token = token,
+                Request.Scheme
+            });
+
+          
+            string body = await _viewRenderService.RenderToStringAsync("_RegisterEmail", callBackUrl);
             await _emailSender.SendEmailAsync(new EmailModel(user.Email, "Confirmation", body));
 
             ViewBag.IsSent = true;
             return View();
         }
+
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
             if (userId == null || token == null) return BadRequest();
@@ -73,8 +122,11 @@ namespace NewIdentity.Controllers
 
             token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
             var result = await _userManager.ConfirmEmailAsync(user, token);
-            ViewBag.IsConfirmed = result.Succeeded  ? true : false;
+            ViewBag.IsConfirmed = result.Succeeded ? true : false;
             return View();
         }
+
+
+
     }
 }

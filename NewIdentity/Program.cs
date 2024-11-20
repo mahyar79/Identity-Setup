@@ -15,9 +15,10 @@ using NewIdentity.Models;
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
-    builder.Services.AddDefaultIdentity<IdentityUser>().
-        AddEntityFrameworkStores<ApplicationDbContext>().
-        AddDefaultTokenProviders();
+builder.Services.AddDefaultIdentity<IdentityUser>().
+    AddEntityFrameworkStores<ApplicationDbContext>().
+    AddDefaultTokenProviders();
+
 
 
 
@@ -35,9 +36,13 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
         options.UseSqlServer(connectionString));
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-    //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    //    .AddEntityFrameworkStores<ApplicationDbContext>();
-    builder.Services.AddControllersWithViews();
+
+//builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+//    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+
+builder.Services.AddControllersWithViews();
 
     var app = builder.Build();
 

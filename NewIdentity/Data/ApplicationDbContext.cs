@@ -27,7 +27,7 @@ namespace NewIdentity.Data
                 .HasForeignKey(u => u.CountryId)
                 .OnDelete(DeleteBehavior.Restrict); 
 
-            
+                
                 
         }
 
