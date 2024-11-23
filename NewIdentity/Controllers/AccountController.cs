@@ -23,6 +23,7 @@ namespace NewIdentity.Controllers
         private readonly ApplicationDbContext _dbContext;
         private readonly IViewRenderService _viewRenderService;
 
+
         public AccountController(UserManager<IdentityUser> userManager, IEmailSender emailSender, ApplicationDbContext dbContext)
         {
             _userManager = userManager;
@@ -55,16 +56,16 @@ namespace NewIdentity.Controllers
         public async Task<IActionResult> Register(RegisterVM model)
         {
            
-            if (!ModelState.IsValid)
-            {
-                model.Countries = _dbContext.Countries
-                    .Select(c => new SelectListItem
-                    {
-                        Value = c.Id.ToString(),
-                        Text = c.Name
-                    }).ToList();
-                return View(model);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    model.Countries = _dbContext.Countries
+            //        .Select(c => new SelectListItem
+            //        {
+            //            Value = c.Id.ToString(),
+            //            Text = c.Name
+            //        }).ToList();
+            //    return View(model);
+            //}
 
            
             var user = new ApplicationUser
@@ -107,8 +108,8 @@ namespace NewIdentity.Controllers
             });
 
           
-            string body = await _viewRenderService.RenderToStringAsync("_RegisterEmail", callBackUrl);
-            await _emailSender.SendEmailAsync(new EmailModel(user.Email, "Confirmation", body));
+           // string body = await _viewRenderService.RenderToStringAsync("_RegisterEmail", callBackUrl);
+          //  await _emailSender.SendEmailAsync(new EmailModel(user.Email, "Confirmation", body));
 
             ViewBag.IsSent = true;
             return View();
