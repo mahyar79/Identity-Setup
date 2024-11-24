@@ -1,28 +1,41 @@
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NewIdentity.Data;
 using NewIdentity.Tools;
 using NewIdentity.Models;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 
 
 
 
-    var builder = WebApplication.CreateBuilder(args);
+
+var builder = WebApplication.CreateBuilder(args);
 
 
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
-builder.Services.AddDefaultIdentity<IdentityUser>().
+
+//builder.Services.AddIdentity<Microsoft.AspNetCore.Identity.IdentityUser, Microsoft.AspNetCore.Identity.IdentityRole>()
+//    .AddEntityFrameworkStores<ApplicationDbContext>()
+//    .AddDefaultTokenProviders();
+
+
+
+
+//the below is the previous code
+builder.Services.AddDefaultIdentity<Microsoft.AspNetCore.Identity.IdentityUser>().
     AddEntityFrameworkStores<ApplicationDbContext>().
     AddDefaultTokenProviders();
 
 
 
 
-builder.Services.AddScoped<IEmailSender, EmailSender>();
+//builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 builder.Services.AddScoped<IViewRenderService, ViewRenderService>();
 

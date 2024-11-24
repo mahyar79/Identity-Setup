@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿/*
+
+using System.Net;
 using System.Net.Mail;
 
 namespace NewIdentity.Tools;
@@ -49,3 +51,5 @@ public class EmailModel
     public string Subject { get; set; }
     public string Body { get; set; }
 }
+
+*/
