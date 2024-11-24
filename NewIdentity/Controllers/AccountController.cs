@@ -1,18 +1,11 @@
-﻿using System.Security.Claims;
-using System.Text;
-using NewIdentity.Models;
-using NewIdentity.Tools;
-using NewIdentity.ViewModels;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.WebUtilities;
 using NewIdentity.Data;
-
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
+using NewIdentity.Models;
+using NewIdentity.ViewModels;
+using System.Text;
 
 
 namespace NewIdentity.Controllers
@@ -21,13 +14,13 @@ namespace NewIdentity.Controllers
     public class AccountController : Controller
     {
 
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         // private readonly IEmailSender _emailSender;
         private readonly ApplicationDbContext _dbContext;
         //  private readonly IViewRenderService _viewRenderService;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AccountController(UserManager<IdentityUser> userManager, ApplicationDbContext dbContext, SignInManager<IdentityUser> signInManager)
+        public AccountController(UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext, SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             // _emailSender = emailSender;
@@ -206,19 +199,116 @@ namespace NewIdentity.Controllers
             return View();
         }
 
-        //public async Task<IActionResult> ConfirmEmail(string userId, string token)
-        //{
-        //    if (userId == null || token == null) return BadRequest();
-        //    var user = await _userManager.FindByIdAsync(userId);
-        //    if (user == null) return NotFound();
-
-        //    token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
-        //    var result = await _userManager.ConfirmEmailAsync(user, token);
-        //    ViewBag.IsConfirmed = result.Succeeded ? true : false;
-        //    return View();
-        //}
 
 
+
+        // just test 
+
+        [HttpGet]
+        public async Task<IActionResult> EditCountry()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login");
+
+            var model = new EditCountryVM
+            {
+                SelectedCountryId = user.CountryId,
+                Countries = _dbContext.Countries
+                    .Select(c => new SelectListItem
+                    {
+                        Value = c.Id.ToString(),
+                        Text = c.Name
+                    }).ToList()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditCountry(EditCountryVM model)
+        {
+
+          
+
+
+
+            // temporary changed this to true
+            if (ModelState.IsValid) return View(model);
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login");
+
+            user.CountryId =  model.SelectedCountryId;
+            await _userManager.UpdateAsync(user);
+
+
+
+            return RedirectToAction("Index", "Home");
+
+
+
+            
+
+
+
+
+
+
+            // HANDLING EDIT COUNTRY    
+            //public async Task<IActionResult> EditCountry()
+            //{
+            //    var user = await _userManager.GetUserAsync(User);
+            //    if (user == null) return RedirectToAction("Login");
+            //    var model = new EditCountryVM
+            //    {
+            //         SelectedCountryId = user.CountryId,
+
+            //        Countries = _dbContext.Countries
+            //          .Select(c => new SelectListItem
+            //          {
+            //              Value = c.Id.ToString(),
+            //              Text = c.Name,
+            //              Selected = c.Id == user.CountryId
+            //          }).ToList()
+
+            //    };
+            //    return View(model);
+            //}
+            //[HttpPost]
+            //public async Task<IActionResult> EditCountry(EditCountryVM model)
+            //{
+            //    if (!ModelState.IsValid) return View(model);
+            //    var user = await _userManager.GetUserAsync(User);
+            //    if (user == null) return RedirectToAction("Login");
+            //    user.CountryId = model.SelectedCountryId;
+            //    await _userManager.UpdateAsync(user);
+            //    await _dbContext.SaveChangesAsync();
+
+            //    return RedirectToAction("Index", "Home");
+            //}
+
+        }
 
     }
 }
+
+
+
+
+//public async Task<IActionResult> ConfirmEmail(string userId, string token)
+//{
+//    if (userId == null || token == null) return BadRequest();
+//    var user = await _userManager.FindByIdAsync(userId);
+//    if (user == null) return NotFound();
+
+//    token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+//    var result = await _userManager.ConfirmEmailAsync(user, token);
+//    ViewBag.IsConfirmed = result.Succeeded ? true : false;
+//    return View();
+//}
+
+
+
+
+
+

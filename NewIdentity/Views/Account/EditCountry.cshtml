@@ -1,0 +1,11 @@
+﻿@model NewIdentity.ViewModels.EditCountryVM
+
+<h1>Edit Country</h1>
+<hr />
+<form asp-action="EditCountry" method="post">
+    <div class="form-group">
+        <label for="SelectedCountryId">Select a Country</label>
+        <select asp-for="SelectedCountryId" asp-items="Model.Countries" class="form-control"></select>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>

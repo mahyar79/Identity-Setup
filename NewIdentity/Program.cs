@@ -2,15 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NewIdentity.Data;
-using NewIdentity.Tools;
 using NewIdentity.Models;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNet.Identity.EntityFramework;
-
-
-
-
-
+using NewIdentity.Tools;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 //the below is the previous code
-builder.Services.AddDefaultIdentity<Microsoft.AspNetCore.Identity.IdentityUser>().
+builder.Services.AddDefaultIdentity<ApplicationUser>().
     AddEntityFrameworkStores<ApplicationDbContext>().
     AddDefaultTokenProviders();
 

@@ -5,16 +5,17 @@ using NewIdentity.Models;
 
 namespace NewIdentity.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
 
-        
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Country> Countries { get; set; }
+    
 
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,11 +28,6 @@ namespace NewIdentity.Data
                 .WithMany(el => el.Users)
                 .HasForeignKey(u => u.CountryId)
                 .OnDelete(DeleteBehavior.Restrict); 
-
-                
-                
         }
-
-
     }
 }
