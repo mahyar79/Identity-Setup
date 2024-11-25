@@ -228,22 +228,17 @@ namespace NewIdentity.Controllers
         public async Task<IActionResult> EditCountry(EditCountryVM model)
         {
 
-          
-
-
-
-            // temporary changed this to true
-            if (ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid) return View(model);
 
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return RedirectToAction("Login");
 
             user.CountryId =  model.SelectedCountryId;
-            await _userManager.UpdateAsync(user);
+            await _userManager.UpdateAsync(user);           
 
 
 
-            return RedirectToAction("Index", "Home");
+            return await EditCountry();
 
 
 
