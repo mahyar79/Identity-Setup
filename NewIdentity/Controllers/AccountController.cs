@@ -144,6 +144,8 @@ namespace NewIdentity.Controllers
             var user = new ApplicationUser
             {
                 UserName = model.UserName,
+                FirstName = model.FirstName,
+                FamilyName = model.FamilyName,
                 Email = model.Email,
                 PhoneNumber = model.Phone,
                 CountryId = model.SelectedCountryId
@@ -168,10 +170,25 @@ namespace NewIdentity.Controllers
                 return View(model);
             }
 
-            // these two lines is for checking if it works for redirecting to home
-            await _signInManager.SignInAsync(user, isPersistent: false);
-            return RedirectToAction("Index", "Home");
 
+
+            // these two lines is for checking if it works for redirecting to home
+
+
+
+            if (result.Succeeded)
+            {
+                // Assign the selected role to the user
+                await _userManager.AddToRoleAsync(user, model.Role);
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return RedirectToAction("Index", "Home");
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return View(model);
 
 
 
@@ -198,94 +215,54 @@ namespace NewIdentity.Controllers
             ViewBag.IsSent = false;
             return View();
         }
+    }
+}
 
 
 
 
         // just test 
 
-        [HttpGet]
-        public async Task<IActionResult> EditCountry()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null) return RedirectToAction("Login");
+//        [HttpGet]
+//        public async Task<IActionResult> EditCountry()
+//        {
+//            var user = await _userManager.GetUserAsync(User);
+//            if (user == null) return RedirectToAction("Login");
 
-            var model = new EditCountryVM
-            {
-                SelectedCountryId = user.CountryId,
-                Countries = _dbContext.Countries
-                    .Select(c => new SelectListItem
-                    {
-                        Value = c.Id.ToString(),
-                        Text = c.Name
-                    }).ToList()
-            };
+//            var model = new EditCountryVM
+//            {
+//                SelectedCountryId = user.CountryId,
+//                Countries = _dbContext.Countries
+//                    .Select(c => new SelectListItem
+//                    {
+//                        Value = c.Id.ToString(),
+//                        Text = c.Name
+//                    }).ToList()
+//            };
 
-            return View(model);
-        }
+//            return View(model);
+//        }
 
-        [HttpPost]
-        public async Task<IActionResult> EditCountry(EditCountryVM model)
-        {
+//        [HttpPost]
+//        public async Task<IActionResult> EditCountry(EditCountryVM model)
+//        {
 
-            if (!ModelState.IsValid) return View(model);
+//            if (!ModelState.IsValid) return View(model);
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null) return RedirectToAction("Login");
+//            var user = await _userManager.GetUserAsync(User);
+//            if (user == null) return RedirectToAction("Login");
 
-            user.CountryId =  model.SelectedCountryId;
-            await _userManager.UpdateAsync(user);           
-
-
-
-            return await EditCountry();
+//            user.CountryId =  model.SelectedCountryId;
+//            await _userManager.UpdateAsync(user);           
 
 
 
-            
+//            return await EditCountry();
 
+//        }
 
-
-
-
-
-            // HANDLING EDIT COUNTRY    
-            //public async Task<IActionResult> EditCountry()
-            //{
-            //    var user = await _userManager.GetUserAsync(User);
-            //    if (user == null) return RedirectToAction("Login");
-            //    var model = new EditCountryVM
-            //    {
-            //         SelectedCountryId = user.CountryId,
-
-            //        Countries = _dbContext.Countries
-            //          .Select(c => new SelectListItem
-            //          {
-            //              Value = c.Id.ToString(),
-            //              Text = c.Name,
-            //              Selected = c.Id == user.CountryId
-            //          }).ToList()
-
-            //    };
-            //    return View(model);
-            //}
-            //[HttpPost]
-            //public async Task<IActionResult> EditCountry(EditCountryVM model)
-            //{
-            //    if (!ModelState.IsValid) return View(model);
-            //    var user = await _userManager.GetUserAsync(User);
-            //    if (user == null) return RedirectToAction("Login");
-            //    user.CountryId = model.SelectedCountryId;
-            //    await _userManager.UpdateAsync(user);
-            //    await _dbContext.SaveChangesAsync();
-
-            //    return RedirectToAction("Index", "Home");
-            //}
-
-        }
-
-    }
-}
+//    }
+//}
 
 
 

@@ -12,19 +12,20 @@ var builder = WebApplication.CreateBuilder(args);
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
-
 //builder.Services.AddIdentity<Microsoft.AspNetCore.Identity.IdentityUser, Microsoft.AspNetCore.Identity.IdentityRole>()
 //    .AddEntityFrameworkStores<ApplicationDbContext>()
 //    .AddDefaultTokenProviders();
 
 
-
-
-//the below is the previous code
-builder.Services.AddDefaultIdentity<ApplicationUser>().
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>().
     AddEntityFrameworkStores<ApplicationDbContext>().
-    AddDefaultTokenProviders();
+    AddDefaultTokenProviders(); 
+    
 
+////the below is the previous code
+//builder.Services.AddDefaultIdentity<ApplicationUser>().
+//    AddEntityFrameworkStores<ApplicationDbContext>().
+//    AddDefaultTokenProviders();
 
 
 
@@ -32,12 +33,15 @@ builder.Services.AddDefaultIdentity<ApplicationUser>().
 
 builder.Services.AddScoped<IViewRenderService, ViewRenderService>();
 
+//builder.Services.AddScoped<DataSeeder>();
+
+
 
 
 
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(connectionString));
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -49,6 +53,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddRazorPages();
 
     var app = builder.Build();
 
@@ -64,7 +70,15 @@ builder.Services.AddControllersWithViews();
         app.UseHsts();
     }
 
-    app.UseHttpsRedirection();
+// calling seeding logic 
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();   
+    var dataSeeder = new DataSeeder(roleManager);
+    await dataSeeder.SeedRolesAsync();
+}
+
+app.UseHttpsRedirection();
     app.UseRouting();
 
     app.UseAuthorization();

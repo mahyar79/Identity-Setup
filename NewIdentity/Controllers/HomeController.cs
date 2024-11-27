@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewIdentity.Models;
 
@@ -29,4 +30,24 @@ namespace NewIdentity.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
+
+
+    [Authorize(Roles = "Admin")]
+    public class AdminController : Controller
+    {
+        public IActionResult Index()
+        {
+            return View();
+        }
+    }
+
+    [Authorize(Roles = "User")]
+    public class UserController : Controller
+    {
+        public IActionResult Index()
+        {
+            return View();
+        }
+    }
+
 }

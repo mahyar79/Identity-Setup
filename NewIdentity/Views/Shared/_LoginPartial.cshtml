@@ -4,16 +4,16 @@
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
-        <li class="nav-item">
+      @*   <li class="nav-item">
             <a class="nav-link text-dark" href="/Account/Profile" title="Manage">Hello @User.Identity?.Name!</a>
-        </li>
+        </li> *@
         <li class="nav-item">
             <form action="/Account/Logout" method="post" style="display: inline;">
                 <button type="submit" class="nav-link btn btn-link text-dark custom-logout-btn">Logout</button>
             </form>
 
 
-            <a asp-controller="Account" asp-action="EditCountry" class="btn btn-outline-secondary">Change Country</a>
+           @*  <a asp-controller="Account" asp-action="EditCountry" class="btn btn-outline-secondary">Change Country</a> *@
 
 
 

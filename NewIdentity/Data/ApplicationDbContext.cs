@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using NewIdentity.Models;
+using NewIdentity.ViewModels;
 
 namespace NewIdentity.Data
 {
@@ -15,7 +16,7 @@ namespace NewIdentity.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Country> Countries { get; set; }
-    
+        
 
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,7 +28,7 @@ namespace NewIdentity.Data
                 .HasOne(u => u.Country)
                 .WithMany(el => el.Users)
                 .HasForeignKey(u => u.CountryId)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Restrict);      
         }
     }
 }

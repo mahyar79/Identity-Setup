@@ -1,0 +1,12 @@
+﻿@model NewIdentity.ViewModels.CountryVM
+
+<h1>Delete Country</h1>
+
+<p>Are you sure you want to delete this country?</p>
+<p><strong>@Model.Name</strong></p>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+</form>

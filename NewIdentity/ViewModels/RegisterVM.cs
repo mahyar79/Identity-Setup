@@ -14,6 +14,16 @@ namespace NewIdentity.ViewModels
         [EmailAddress]
         [Remote("IsAnyEmail", "Account", HttpMethod = "Post", AdditionalFields = "__RequestVerificationToken")]
         public string Email { get; set; }
+
+
+        [Required]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Family Name")]
+        public string FamilyName { get; set; }
+
         [Required]
         [Phone]
         public string Phone { get; set; }
@@ -25,6 +35,10 @@ namespace NewIdentity.ViewModels
         public string RePassword { get; set; }
 
         public int? SelectedCountryId { get; set; }
+
+        [Required]
+        public string Role { get; set; }
+
         public List<SelectListItem> Countries { get; set; }
     }
 }
