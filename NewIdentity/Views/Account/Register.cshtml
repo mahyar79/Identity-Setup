@@ -1,4 +1,6 @@
-﻿@model NewIdentity.ViewModels.RegisterVM
+﻿@* @using NewIdentity.Resources
+
+@model NewIdentity.ViewModels.RegisterVM
 
 <h1>Register</h1>
 <hr />
@@ -57,7 +59,7 @@
                 </select>
                 <span asp-validation-for="SelectedCountryId" class="text-danger"></span>
             </div>
-            @* dropdown for role selection *@
+            @* dropdown for role selection 
             <div class="form-group">
                 <label asp-for="Role" class="control-label"></label>
                 <select asp-for="Role" class="form-control">
@@ -71,6 +73,92 @@
             <!-- Submit Button -->
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Register</button>
+            </div>
+        </form>
+    </div>
+</div>
+ *@
+
+
+
+
+
+
+@using NewIdentity.Resources
+
+@model NewIdentity.ViewModels.RegisterVM
+
+<h1>@Resource.Register</h1>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Register" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- First Name -->
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label">@Resource.First_Name</label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+
+            <!-- Family Name -->
+            <div class="form-group">
+                <label asp-for="FamilyName" class="control-label">@Resource.Family_Name</label>
+                <input asp-for="FamilyName" class="form-control" />
+                <span asp-validation-for="FamilyName" class="text-danger"></span>
+            </div>
+
+            <!-- Username -->
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label">@Resource.UserName</label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+
+            <!-- Phone -->
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label">@Resource.Phone</label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label asp-for="Password" class="control-label">@Resource.Password</label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group">
+                <label asp-for="RePassword" class="control-label">@Resource.RePassword</label>
+                <input asp-for="RePassword" type="password" class="form-control" />
+                <span asp-validation-for="RePassword" class="text-danger"></span>
+            </div>
+
+            <!-- Country Dropdown -->
+            <div class="form-group">
+                <label asp-for="SelectedCountryId" class="control-label">@Resource.SelectedCountryId</label>
+                <select asp-for="SelectedCountryId" class="form-control" asp-items="Model.Countries">
+                    <option value="">@Resource.SelectedCountryId</option>
+                </select>
+                <span asp-validation-for="SelectedCountryId" class="text-danger"></span>
+            </div>
+
+            <!-- Dropdown for Role Selection -->
+            <div class="form-group">
+                <label asp-for="Role" class="control-label">@Resource.Role</label>
+                <select asp-for="Role" class="form-control">
+                    <option value="Admin">@Resource.Admin</option>
+                    <option value="User">@Resource.User</option>
+                </select>
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">@Resource.Register</button>
             </div>
         </form>
     </div>

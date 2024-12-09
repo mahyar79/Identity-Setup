@@ -1,5 +1,7 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using NewIdentity.Resources
+@using System.Globalization
+<!DOCTYPE html>
+<html lang="@CultureInfo.CurrentUICulture.Name">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,7 +22,7 @@
                     <ul class="navbar-nav flex-grow-1">
                         <!-- Home is visible to everyone -->
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@Resource.Home</a>
                         </li>
 
                         @if (User.Identity.IsAuthenticated)
@@ -29,33 +31,36 @@
                             {
                                 <!-- Admin-only navigation -->
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="ManageUser" asp-action="Index">Users</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="ManageUser" asp-action="Index">@Resource.Users</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="ManageCountry" asp-action="Index">Countries</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="ManageCountry" asp-action="Index">@Resource.Countries</a>
                                 </li>
-                                <partial name="_LoginPartial" />
                             }
                             else
                             {
                                 <!-- Regular user navigation -->
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="UserProfile" asp-action="EditProfile">Edit Profile</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="UserProfile" asp-action="EditProfile">@Resource.Edit_Profile</a>
                                 </li>
-                                <partial name="_LoginPartial" />
                             }
+                            <!-- Login Partial for authenticated users -->
+                            <partial name="_LoginPartial" />
                         }
                         else
                         {
                             <!-- Unauthenticated navigation -->
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">@Resource.Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">@Resource.Register</a>
                             </li>
                         }
                     </ul>
+                    <!-- Language Selector -->
+                    <partial name="~/Views/Shared/_LanguageSelector.cshtml" />
+
                 </div>
             </div>
         </nav>
@@ -67,7 +72,8 @@
     </div>
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - Identity By .NET - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2024 - Identity By .NET -
+            <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

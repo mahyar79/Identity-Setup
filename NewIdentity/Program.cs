@@ -4,28 +4,22 @@ using Microsoft.EntityFrameworkCore;
 using NewIdentity.Data;
 using NewIdentity.Models;
 using NewIdentity.Tools;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization.Routing;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-    builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
-//builder.Services.AddIdentity<Microsoft.AspNetCore.Identity.IdentityUser, Microsoft.AspNetCore.Identity.IdentityRole>()
-//    .AddEntityFrameworkStores<ApplicationDbContext>()
-//    .AddDefaultTokenProviders();
 
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().
     AddEntityFrameworkStores<ApplicationDbContext>().
-    AddDefaultTokenProviders(); 
-    
+    AddDefaultTokenProviders();
 
-////the below is the previous code
-//builder.Services.AddDefaultIdentity<ApplicationUser>().
-//    AddEntityFrameworkStores<ApplicationDbContext>().
-//    AddDefaultTokenProviders();
 
 
 
@@ -35,16 +29,17 @@ builder.Services.AddScoped<IViewRenderService, ViewRenderService>();
 
 //builder.Services.AddScoped<DataSeeder>();
 
-
+// add localization servies
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 
 
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlServer(connectionString));
-    builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(connectionString));
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 
 //builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -56,43 +51,62 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddRazorPages();
 
-    var app = builder.Build();
+var app = builder.Build();
 
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseMigrationsEndPoint();
-    }
-    else
-    {
-        app.UseExceptionHandler("/Home/Error");
-        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-        app.UseHsts();
-    }
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseMigrationsEndPoint();
+}
+else
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
+
+
+
+
+
+// localization middleware 
+var supportedCultures = new[] { "en", "fa" };
+var localizationOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("en"),
+    SupportedCultures = supportedCultures.Select(c => new CultureInfo(c)).ToList(),
+    SupportedUICultures = supportedCultures.Select(c => new CultureInfo(c)).ToList()
+};
+
+//add the custom RouteDataRequestCultureProvider 
+localizationOptions.RequestCultureProviders.Insert(0, new RouteDataRequestCultureProvider());
+
+
+app.UseRequestLocalization(localizationOptions);
 
 // calling seeding logic 
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();   
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     var dataSeeder = new DataSeeder(roleManager);
     await dataSeeder.SeedRolesAsync();
 }
 
+
+
+
 app.UseHttpsRedirection();
-    app.UseRouting();
+app.UseRouting();
 
-    app.UseAuthorization();
+app.UseAuthorization();
 
-    app.MapStaticAssets();
+app.MapStaticAssets();
 
-    app.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}")
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{culture = en}/{controller=Home}/{action=Index}/{id?}")
         .WithStaticAssets();
 
-    app.MapRazorPages()
-       .WithStaticAssets();
+app.MapRazorPages()
+   .WithStaticAssets();
 
-    app.Run();
-
-
+app.Run();

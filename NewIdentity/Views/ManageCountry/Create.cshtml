@@ -1,13 +1,15 @@
-﻿@model NewIdentity.ViewModels.CountryVM
+﻿@using NewIdentity.Resources
 
-<h1>Add New Country</h1>
+@model NewIdentity.ViewModels.CountryVM
+
+<h1>@Resource.Add_a_New_Country</h1>
 
 <form asp-action="Create" method="post">
     <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
+        <label asp-for="Name" class="control-label">@Resource.Country</label>
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-primary">Add Country</button>
-    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+    <button type="submit" class="btn btn-primary">@Resource.Submit</button>
+    <a class="btn btn-secondary" asp-action="Index">@Resource.Cancel</a>
 </form>

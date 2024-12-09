@@ -1,31 +1,32 @@
-﻿@model NewIdentity.ViewModels.EditProfileVM
+﻿@using NewIdentity.Resources
+@model NewIdentity.ViewModels.EditProfileVM
 
-<h1>Edit Profile</h1>
+<h1>@Resource.Edit_Profile</h1>
 <hr />
 <form asp-action="EditProfile" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
     <div class="form-group">
-        <label asp-for="FirstName" class="control-label"></label>
+        <label asp-for="FirstName" class="control-label">@Resource.First_Name</label>
         <input asp-for="FirstName" class="form-control" />
         <span asp-validation-for="FirstName" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="FamilyName" class="control-label"></label>
+        <label asp-for="FamilyName" class="control-label">@Resource.Family_Name</label>
         <input asp-for="FamilyName" class="form-control" />
         <span asp-validation-for="FamilyName" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="SelectedCountryId" class="control-label"></label>
+        <label asp-for="SelectedCountryId" class="control-label">@Resource.Country</label>
         <select asp-for="SelectedCountryId" asp-items="Model.Countries" class="form-control">
-            <option value="">Select a country</option>
+            <option value="">@Resource.All_Countries</option>
         </select>
         <span asp-validation-for="SelectedCountryId" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <button type="submit" class="btn btn-primary">@Resource.Save_Changes</button>
     </div>
 </form>

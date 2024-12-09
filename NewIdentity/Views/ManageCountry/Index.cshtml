@@ -1,6 +1,7 @@
-﻿<div class="d-flex justify-content-between mb-3">
-    <h2>Manage Countries</h2>
-    <a asp-controller="ManageCountry" asp-action="Create" class="btn btn-success">Add New Country</a>
+﻿@using NewIdentity.Resources
+<div class="d-flex justify-content-between mb-3">
+    <h2>@Resource.Manage_Countries</h2>
+    <a asp-controller="ManageCountry" asp-action="Create" class="btn btn-success">@Resource.Add_a_New_Country</a>
 </div>
 
 @if (TempData["ErrorMessage"] != null)
@@ -21,8 +22,8 @@
     <thead>
         <tr>
             <th>#</th>
-            <th>Country Name</th>
-            <th>Actions</th>
+            <th>@Resource.Country_Name</th>
+            <th>@Resource.Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -33,11 +34,11 @@
                 <td>@country.Name</td>
                 <td>
                     <!-- Edit Button -->
-                    <a asp-controller="ManageCountry" asp-action="Edit" asp-route-id="@country.Id" class="btn btn-primary">Edit</a>
+                    <a asp-controller="ManageCountry" asp-action="Edit" asp-route-id="@country.Id" class="btn btn-primary">@Resource.Edit</a>
 
                     <!-- Delete Form -->
                     <form asp-controller="ManageCountry" asp-action="Delete" asp-route-id="@country.Id" method="post" class="d-inline">
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this country?');">Delete</button>
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('@Resource.Are_you_sure_you_want_to_delete_this_country_');">@Resource.Delete</button>
                     </form>
                 </td>
             </tr>

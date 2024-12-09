@@ -1,9 +1,10 @@
-﻿@model List<Country> 
+﻿@using NewIdentity.Resources
+@model List<Country> 
 <table class="table">
     <thead>
         <tr>
-            <th scope="col">id</th>
-            <th scope="col">Name</th>
+            <th scope="col">@Resource.SelectedCountryId</th>
+            <th scope="col">@Resource.Country_Name</th>
           
         </tr>
     </thead>

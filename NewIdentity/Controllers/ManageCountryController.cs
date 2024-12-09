@@ -4,15 +4,18 @@ using NewIdentity.Data;
 using NewIdentity.Models;
 using NewIdentity.ViewModels;
 using System.CodeDom;
+using NewIdentity.Resources;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 
 namespace NewIdentity.Controllers
 {
     [Authorize(Roles = "Admin")]
 
-    public class ManageCountryController : Controller
+    public class ManageCountryController : CustomBaseController
     {
         private readonly ApplicationDbContext _dbContext;
-        public ManageCountryController(ApplicationDbContext dbContext)
+        public ManageCountryController(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             _dbContext = dbContext;
         }
@@ -88,7 +91,7 @@ namespace NewIdentity.Controllers
             bool hasAssignedUsers = _dbContext.Users.Any(u => u.CountryId == id);
             if (hasAssignedUsers)
             {
-                TempData["ErrorMessage"] = "OOPS! Can not delete this country because there are users assigned to it.";
+                TempData["ErrorMessage"] = $"{Resource.OOPS__Can_not_delete_this_country_because_there_are_users_assigned_to_it_}";
                 return RedirectToAction("index");
             }
 

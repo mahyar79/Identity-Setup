@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NewIdentity.Data;
@@ -11,15 +13,15 @@ using System.Threading.Tasks;
 namespace NewIdentity.Controllers
 {
     [Authorize]
-    public class UserProfileController : Controller
+    public class UserProfileController : CustomBaseController
     {
        private readonly UserManager<ApplicationUser> _userManager;
        private readonly ApplicationDbContext _dbContext;
 
-        public UserProfileController(UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext)
+        public UserProfileController(UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
-                _dbContext = dbContext;
-                _userManager = userManager;
+            _dbContext = dbContext;
+            _userManager = userManager;
         }
 
         [HttpGet]

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
@@ -11,7 +13,7 @@ using System.Text;
 namespace NewIdentity.Controllers
 {
 
-    public class AccountController : Controller
+    public class AccountController : CustomBaseController
     {
 
         private readonly UserManager<ApplicationUser> _userManager;
@@ -20,7 +22,7 @@ namespace NewIdentity.Controllers
         //  private readonly IViewRenderService _viewRenderService;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AccountController(UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext, SignInManager<ApplicationUser> signInManager)
+        public AccountController(UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext, SignInManager<ApplicationUser> signInManager, IHttpContextAccessor httpContextAccessor): base(httpContextAccessor)
         {
             _userManager = userManager;
             // _emailSender = emailSender;
@@ -95,6 +97,7 @@ namespace NewIdentity.Controllers
 
         // post logout 
 
+        [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();

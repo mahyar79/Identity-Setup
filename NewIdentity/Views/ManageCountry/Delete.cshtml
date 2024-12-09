@@ -1,12 +1,14 @@
-﻿@model NewIdentity.ViewModels.CountryVM
+﻿@using NewIdentity.Resources
 
-<h1>Delete Country</h1>
+@model NewIdentity.ViewModels.CountryVM
 
-<p>Are you sure you want to delete this country?</p>
+<h1>@Resource.Delete_a_country</h1>
+
+<p>@Resource.Are_you_sure_you_want_to_delete_this_country_</p>
 <p><strong>@Model.Name</strong></p>
 
 <form asp-action="DeleteConfirmed" method="post">
     <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">Delete</button>
-    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+    <button type="submit" class="btn btn-danger">@Resource.Delete</button>
+    <a class="btn btn-secondary" asp-action="Index">@Resource.Cancel</a>
 </form>

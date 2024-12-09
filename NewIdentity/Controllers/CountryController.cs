@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewIdentity.Data;
 using NewIdentity.Models;
@@ -6,11 +8,11 @@ using System.CodeDom;
 
 namespace NewIdentity.Controllers
 {
-    public class CountryController : Controller
+    public class CountryController : CustomBaseController
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public CountryController(ApplicationDbContext dbContext)
+        public CountryController(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             _dbContext = dbContext;
         }

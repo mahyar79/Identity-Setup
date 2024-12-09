@@ -1,4 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using System.Globalization
+@using NewIdentity.Resources
+
+
 @inject SignInManager<ApplicationUser> SignInManager
 
 <ul class="navbar-nav">
@@ -8,9 +12,15 @@
             <a class="nav-link text-dark" href="/Account/Profile" title="Manage">Hello @User.Identity?.Name!</a>
         </li> *@
         <li class="nav-item">
-            <form action="/Account/Logout" method="post" style="display: inline;">
+          @*   <form action="/Account/Logout" method="post" style="display: inline;">
                 <button type="submit" class="nav-link btn btn-link text-dark custom-logout-btn">Logout</button>
+            </form> *@
+
+            <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                <button type="submit" class="btn btn-link">@Resource.Logout</button>
             </form>
+
+
 
 
            @*  <a asp-controller="Account" asp-action="EditCountry" class="btn btn-outline-secondary">Change Country</a> *@

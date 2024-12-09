@@ -1,14 +1,15 @@
-﻿@model IEnumerable<NewIdentity.ViewModels.UserVM>
+﻿@using NewIdentity.Resources
+@model IEnumerable<NewIdentity.ViewModels.UserVM>
 
-<h1>All Registered Users</h1>
+<h1>@Resource.All_Registered_Users</h1>
 
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>User Name</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
+            <th>@Resource.UserName</th>
+            <th>@Resource.First_Name</th>
+            <th>@Resource.Family_Name</th>
+            <th>@Resource.Email</th>
         </tr>
     </thead>
     <tbody>
