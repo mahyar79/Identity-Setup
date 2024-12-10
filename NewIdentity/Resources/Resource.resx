@@ -186,6 +186,9 @@
   <data name="Manage Countries" xml:space="preserve">
     <value>Manage Countries</value>
   </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
   <data name="Ok" xml:space="preserve">
     <value>Ok</value>
   </data>
@@ -197,6 +200,9 @@
   </data>
   <data name="Phone" xml:space="preserve">
     <value>Phone</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Previous</value>
   </data>
   <data name="Register" xml:space="preserve">
     <value>Register</value>

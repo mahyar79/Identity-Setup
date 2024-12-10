@@ -16,9 +16,13 @@ namespace NewIdentity.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 10, int pageSize = 10)
         {
+            var totalUsers = await _userManager.Users.CountAsync(); 
+
             var users = await _userManager.Users
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
            .Select(user => new UserVM
            {
                Id = user.Id,
@@ -28,6 +32,12 @@ namespace NewIdentity.Controllers
                Email = user.Email
            })
            .ToListAsync();
+
+            var totalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
+
+            ViewBag.currentPage = page;
+            ViewBag.totalPages = totalPages;
+
             return View(users);
         }
     }
