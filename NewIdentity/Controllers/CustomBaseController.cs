@@ -1,17 +1,25 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Localization;
+﻿using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Http;
+using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace NewIdentity.Controllers
+public class CustomBaseController : Controller
 {
-    public class CustomBaseController : Controller
+    public CustomBaseController(IHttpContextAccessor httpContextAccessor)
     {
-        public CustomBaseController(IHttpContextAccessor httpContextAccessor)
+        var culture = httpContextAccessor.HttpContext?.GetRouteValue("culture")?.ToString();
+
+        if (string.IsNullOrEmpty(culture))
         {
-            if ((httpContextAccessor?.HttpContext?.Request?.Cookies[CookieRequestCultureProvider.DefaultCookieName] ?? "en") == "en")
-                Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en");
-            else
-                Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("fa");
+            // Fallback to cookie value if route value is not present
+            culture = httpContextAccessor.HttpContext?.Request?.Cookies[CookieRequestCultureProvider.DefaultCookieName]?.Split('|')[0] ?? "en";
+        }
+
+        if (culture == "en" || culture == "fa")
+        {
+            var cultureInfo = new CultureInfo(culture);
+            Thread.CurrentThread.CurrentCulture = cultureInfo;
+            Thread.CurrentThread.CurrentUICulture = cultureInfo;
         }
     }
 }

@@ -16,7 +16,7 @@ namespace NewIdentity.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> Index(int page = 10, int pageSize = 10)
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
         {
             var totalUsers = await _userManager.Users.CountAsync(); 
 

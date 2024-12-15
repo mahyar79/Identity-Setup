@@ -3,6 +3,41 @@
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 @{
+    // Get culture from route or fallback to cookie
+    var cultureFromRoute = HttpContextAccessor?.HttpContext?.GetRouteValue("culture")?.ToString();
+    var currentCulture = string.IsNullOrEmpty(cultureFromRoute)
+        ? HttpContextAccessor?.HttpContext?.Request?.Cookies[CookieRequestCultureProvider.DefaultCookieName]?.Split('|')[0] ?? "en"
+        : cultureFromRoute;
+
+    var englishSelected = "<option value=\"en\" " + (currentCulture == "en" ? "selected=\"selected\"" : "") + " >English</option>";
+    var persianSelected = "<option value=\"fa\" " + (currentCulture == "fa" ? "selected=\"selected\"" : "") + " >فارسی</option>";
+}
+
+<form asp-controller="Home" asp-action="SetLanguage" method="post">
+    <select name="culture" onchange="this.form.submit()">
+        @Html.Raw(englishSelected)
+        @Html.Raw(persianSelected)
+    </select>
+    <input type="hidden" name="returnUrl" value="@HttpContextAccessor?.HttpContext?.Request?.Path" />
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+@* @using System.Globalization
+@using Microsoft.AspNetCore.Localization
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
     //var currentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
         var currentCulture = HttpContextAccessor?.HttpContext?.Request?.Cookies[CookieRequestCultureProvider.DefaultCookieName] ?? "en";
     var englishSelected = "<option value=\"en\" " + (currentCulture == "en" ? "selected=\"selected\"" : "" ) + " >English</option>";
@@ -18,7 +53,7 @@
 
 
 </form>
-
+ *@
 
 
 
