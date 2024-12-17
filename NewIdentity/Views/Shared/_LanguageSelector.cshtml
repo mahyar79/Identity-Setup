@@ -5,12 +5,18 @@
 @{
     // Get culture from route or fallback to cookie
     var cultureFromRoute = HttpContextAccessor?.HttpContext?.GetRouteValue("culture")?.ToString();
-    var currentCulture = string.IsNullOrEmpty(cultureFromRoute)
-        ? HttpContextAccessor?.HttpContext?.Request?.Cookies[CookieRequestCultureProvider.DefaultCookieName]?.Split('|')[0] ?? "en"
-        : cultureFromRoute;
 
-    var englishSelected = "<option value=\"en\" " + (currentCulture == "en" ? "selected=\"selected\"" : "") + " >English</option>";
-    var persianSelected = "<option value=\"fa\" " + (currentCulture == "fa" ? "selected=\"selected\"" : "") + " >فارسی</option>";
+    // Normalize to full culture format (e.g., en-US, fa-IR)
+    var currentCulture = cultureFromRoute switch
+    {
+        "en" => "en-US",
+        "fa" => "fa-IR",
+        _ => cultureFromRoute ?? HttpContextAccessor?.HttpContext?.Request?.Cookies[CookieRequestCultureProvider.DefaultCookieName]?.Split('|')[0] ?? "en-US"
+    };
+
+    // Generate dropdown options
+    var englishSelected = "<option value=\"en\" " + (currentCulture == "en-US" ? "selected=\"selected\"" : "") + " >English</option>";
+    var persianSelected = "<option value=\"fa\" " + (currentCulture == "fa-IR" ? "selected=\"selected\"" : "") + " >فارسی</option>";
 }
 
 <form asp-controller="Home" asp-action="SetLanguage" method="post">
@@ -20,6 +26,7 @@
     </select>
     <input type="hidden" name="returnUrl" value="@HttpContextAccessor?.HttpContext?.Request?.Path" />
 </form>
+
 
 
 

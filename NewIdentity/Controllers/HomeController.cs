@@ -35,16 +35,25 @@ namespace NewIdentity.Controllers
 
 
 
-        // set language action 
+
+
+
         [HttpPost]
         public IActionResult SetLanguage(string culture, string returnUrl)
         {
             if (!string.IsNullOrEmpty(culture))
             {
-                // Update the culture cookie
+                culture = culture switch
+                {
+                    "en" => "en-US",
+                    "fa" => "fa-IR",
+                    _ => culture
+                };
+
                 Response.Cookies.Append(
                     CookieRequestCultureProvider.DefaultCookieName,
-                    culture
+                    CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                    new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
                 );
             }
 
@@ -54,21 +63,32 @@ namespace NewIdentity.Controllers
             }
             else
             {
-               
-                var segments = returnUrl.Split('/');
-                if (segments.Length > 1 && segments[1].Length == 2)
+                var segments = returnUrl.TrimStart('/').Split('/');
+
+                if (segments.Length > 0 && (segments[0].Length == 2 || segments[0].Length == 5))
                 {
-                    segments[1] = culture;
-                    returnUrl = string.Join('/', segments);
+                    segments[0] = culture;
+                    returnUrl = "/" + string.Join('/', segments);
                 }
                 else
                 {
-                    returnUrl = $"/{culture}{returnUrl}"; 
+                    returnUrl = $"/{culture}{(returnUrl.StartsWith("/") ? returnUrl : "/" + returnUrl)}";
                 }
             }
 
             return LocalRedirect(returnUrl);
         }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
